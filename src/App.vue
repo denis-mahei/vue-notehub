@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, type Ref } from 'vue'
 import ContactForm from '@/components/ContactForm.vue'
 import ContactList from '@/components/ContactList.vue'
-const contacts = ref([
-  { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-  { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-  { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-  { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-])
+import data from '@/data/data.json'
+import type { Contact } from '@/types/contact.ts'
+
+const contacts = ref<Contact[]>(data)
 
 onMounted(() => {
   const savedContacts = localStorage.getItem('contacts')
@@ -23,10 +21,11 @@ watch(
   },
   { deep: true },
 )
-const storeContact = (contact) => {
+const storeContact = (contact: Contact): void => {
   contacts.value.push(contact)
 }
-const deleteContact = (contactId) =>
+
+const deleteContact = (contactId: string) =>
   (contacts.value = contacts.value.filter(
     (contact) => contactId !== contact.id,
   ))

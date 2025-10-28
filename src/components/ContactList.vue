@@ -12,7 +12,7 @@ const emit = defineEmits(['delete-contact'])
       :name="contact.name"
       :number="contact.number"
       :id="contact.id"
-      @delete-contact="emit('delete-contact',contact.id)"
+      @delete-contact="emit('delete-contact', contact.id)"
     />
   </ul>
 </template>

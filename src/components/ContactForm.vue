@@ -1,11 +1,17 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 
 const emit = defineEmits(['add-contact'])
 
 const newContact = reactive({
   name: '',
   number: '',
+})
+
+const input = ref(null)
+
+onMounted(()=> {
+  input.value.focus()
 })
 
 const handleSubmit = () => {
@@ -25,6 +31,7 @@ const handleSubmit = () => {
           required
           v-model="newContact.name"
           placeholder=" "
+          ref="input"
         />
         <label class="labelline" for="name">Name</label>
       </div>

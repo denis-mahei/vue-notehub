@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import ContactForm from '@/components/ContactForm.vue'
 import ContactList from '@/components/ContactList.vue'
 const contacts = ref([
@@ -9,11 +9,27 @@ const contacts = ref([
   { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
 ])
 
+onMounted(() => {
+  const savedContacts = localStorage.getItem('contacts')
+  if (savedContacts) {
+    contacts.value = JSON.parse(savedContacts)
+  }
+})
+
+watch(
+  contacts,
+  (newContacts) => {
+    localStorage.setItem('contacts', JSON.stringify(newContacts))
+  },
+  { deep: true },
+)
 const storeContact = (contact) => {
   contacts.value.push(contact)
 }
 const deleteContact = (contactId) =>
- contacts.value = contacts.value.filter((contact) => contactId !== contact.id)
+  (contacts.value = contacts.value.filter(
+    (contact) => contactId !== contact.id,
+  ))
 </script>
 
 <template>
@@ -30,8 +46,14 @@ const deleteContact = (contactId) =>
       <img src="@/assets/logo.svg" alt="logo" class="logo" width="60" />
     </a>
   </header>
-  <ContactForm @add-contact="storeContact" />
-  <ContactList :contacts="contacts" @delete-contact="deleteContact"/>
+  <main>
+    <section class="contact-form">
+      <ContactForm @add-contact="storeContact" />
+    </section>
+    <section class="contacts">
+      <ContactList :contacts="contacts" @delete-contact="deleteContact" />
+    </section>
+  </main>
 </template>
 
 <style scoped>
@@ -44,6 +66,10 @@ header {
   align-items: center;
   background-image: linear-gradient(var(--vt-c-indigo), var(--vt-c-black-mute));
 }
+main {
+  padding: 20px;
+}
+
 .wrapper {
   padding: 16px;
   border-radius: 10px;
@@ -70,5 +96,9 @@ p {
 .v-enter-from,
 .v-leave-to {
   opacity: 0;
+}
+.contacts {
+  padding: 20px;
+  margin-top: 16px;
 }
 </style>

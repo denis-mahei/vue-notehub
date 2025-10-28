@@ -21,6 +21,7 @@ const emit = defineEmits(['delete-contact'])
 .list-item {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 16px;
 }
 </style>
